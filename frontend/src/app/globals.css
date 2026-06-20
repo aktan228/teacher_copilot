@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f7f8fc;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  background-color: var(--bg);
+  color: theme("colors.ink.DEFAULT");
+}
+
+/* Subtle, distinctive gradient backdrop used on marketing + auth screens */
+.bg-aurora {
+  background:
+    radial-gradient(60rem 60rem at 12% -10%, rgba(99, 109, 241, 0.14), transparent 55%),
+    radial-gradient(50rem 50rem at 95% 0%, rgba(16, 185, 129, 0.10), transparent 50%),
+    radial-gradient(40rem 40rem at 50% 120%, rgba(79, 78, 229, 0.10), transparent 50%);
+}
+
+.bg-grid {
+  background-image: linear-gradient(rgba(15, 18, 34, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 18, 34, 0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.gradient-text {
+  background: linear-gradient(110deg, #4f4ee5 0%, #636df1 40%, #10b981 110%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 18, 34, 0.16);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 18, 34, 0.28);
+  background-clip: padding-box;
+}
+
+/* Skeleton shimmer */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Typography tuning for AI-generated markdown */
+.prose-tc {
+  --tw-prose-body: theme("colors.ink.soft");
+  --tw-prose-headings: theme("colors.ink.DEFAULT");
+  --tw-prose-bold: theme("colors.ink.DEFAULT");
+  --tw-prose-bullets: theme("colors.brand.400");
+  --tw-prose-quotes: theme("colors.ink.soft");
+  --tw-prose-quote-borders: theme("colors.brand.300");
+  max-width: none;
+}
+.prose-tc :where(h1, h2, h3) {
+  scroll-margin-top: 6rem;
+}
+.prose-tc :where(h2)::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 1.05rem;
+  margin-right: 0.55rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #4f4ee5, #636df1);
+  transform: translateY(1px);
+}
