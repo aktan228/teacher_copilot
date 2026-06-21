@@ -114,7 +114,7 @@ export function DashboardShell({
         <p className="mt-2 text-center text-[11px] leading-tight text-ink-muted">
           {demoMode
             ? "Add an API key in .env.local for live AI"
-            : "Connected to Claude"}
+            : "Connected to OpenRouter"}
         </p>
       </div>
     </div>

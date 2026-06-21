@@ -25,19 +25,18 @@ export async function POST(req: NextRequest) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        const llm = client.messages.stream({
+        const llm = await client.chat.completions.create({
           model: MODEL,
           max_tokens: 1500,
-          system: assistantSystem(language),
-          messages: messages.map((m) => ({ role: m.role, content: m.content })),
+          messages: [
+            { role: "system", content: assistantSystem(language) },
+            ...messages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+          ],
+          stream: true,
         });
-        for await (const event of llm) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
+        for await (const chunk of llm) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) controller.enqueue(encoder.encode(text));
         }
         controller.close();
       } catch (err) {

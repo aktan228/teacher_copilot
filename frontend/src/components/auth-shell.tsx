@@ -18,7 +18,7 @@ export function AuthShell({
       <div className="relative hidden bg-gradient-to-br from-brand-700 via-brand-700 to-brand-900 p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <div className="bg-grid absolute inset-0 opacity-[0.12]" />
         <Link href="/" className="relative z-10">
-          <Logo textClassName="text-white" />
+          <Logo tone="white" />
         </Link>
         <div className="relative z-10 max-w-md">
           <h2 className="text-3xl font-bold leading-tight">

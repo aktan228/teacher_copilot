@@ -16,13 +16,15 @@ export async function POST(req: NextRequest) {
 
   try {
     const { system, user } = quizPrompt(input);
-    const msg = await client.messages.create({
+    const msg = await client.chat.completions.create({
       model: MODEL,
       max_tokens: 3500,
-      system,
-      messages: [{ role: "user", content: user }],
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
     });
-    const text = msg.content.map((b) => (b.type === "text" ? b.text : "")).join("");
+    const text = msg.choices[0]?.message?.content ?? "";
     const parsed = extractJson<Quiz>(text);
 
     if (!parsed || !Array.isArray(parsed.questions) || parsed.questions.length === 0) {

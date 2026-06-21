@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
   const input = (await req.json()) as LessonInput;
   const client = getClient();
 
-  // DEMO MODE — no API key configured.
   if (!client) return demoStream(demoLesson(input));
 
   const { system, user } = lessonPrompt(input);
@@ -21,23 +20,21 @@ export async function POST(req: NextRequest) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        const llm = client.messages.stream({
+        const llm = await client.chat.completions.create({
           model: MODEL,
           max_tokens: 3500,
-          system,
-          messages: [{ role: "user", content: user }],
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: user },
+          ],
+          stream: true,
         });
-        for await (const event of llm) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
+        for await (const chunk of llm) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) controller.enqueue(encoder.encode(text));
         }
         controller.close();
       } catch (err) {
-        // Never fail in front of an audience — fall back to demo content.
         console.error("Lesson generation failed, using demo content:", err);
         controller.enqueue(encoder.encode(demoLesson(input)));
         controller.close();

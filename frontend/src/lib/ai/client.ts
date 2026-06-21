@@ -1,21 +1,24 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
-/**
- * Central place for AI configuration so features stay model-agnostic and the
- * AI layer is easy to swap (PRD priority: "keep AI features replaceable").
- */
-export const MODEL = process.env.ANTHROPIC_MODEL?.trim() || "claude-opus-4-8";
+export const MODEL = process.env.OPENROUTER_MODEL?.trim() || "anthropic/claude-opus-4-8";
 
-/** True when a real API key is configured; otherwise we serve demo content. */
 export function hasApiKey(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY.trim());
+  return Boolean(process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY.trim());
 }
 
-let cached: Anthropic | null = null;
+let cached: OpenAI | null = null;
 
-/** Returns a configured client, or null when running in demo mode. */
-export function getClient(): Anthropic | null {
+export function getClient(): OpenAI | null {
   if (!hasApiKey()) return null;
-  if (!cached) cached = new Anthropic();
+  if (!cached) {
+    cached = new OpenAI({
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
+      defaultHeaders: {
+        "HTTP-Referer": "https://teacher-copilot.app",
+        "X-Title": "Teacher Copilot",
+      },
+    });
+  }
   return cached;
 }
