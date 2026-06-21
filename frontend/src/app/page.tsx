@@ -88,10 +88,6 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-2 lg:py-24">
           <div className="animate-slide-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/80 px-3 py-1 text-xs font-medium text-brand-700 shadow-soft">
-              <Sparkles className="h-3.5 w-3.5" />
-              Powered by Claude
-            </span>
             <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-6xl">
               The AI copilot that gives teachers their{" "}
               <span className="gradient-text">time back</span>.
